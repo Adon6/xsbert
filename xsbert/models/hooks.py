@@ -45,3 +45,18 @@ def mpnet_reshaping_hook(N: int):
           p = repeat_reference_input(inpt[3], N=N)
           return inpt[:3] + (p,)
      return hook
+
+# bert
+
+def bert_interpolation_hook(N: int, outputs: list):
+    def hook(model, inpt):
+        g = interpolate_reference_embedding(inpt[0], N=N)
+        outputs.append(g)
+        return (g,) + inpt[1:]
+    return hook
+
+def bert_reshaping_hook(N: int):
+    def hook(model, inpt):
+        p = repeat_reference_input(inpt[3], N=N)
+        return inpt[:3] + (p,)
+    return hook
